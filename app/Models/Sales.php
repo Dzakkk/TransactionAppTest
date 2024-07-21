@@ -6,10 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Scout\Searchable;
 
 class Sales extends Model
 {
     use HasFactory;
+
+    use Searchable;
 
     protected $table = 'sales';
 
@@ -35,6 +38,19 @@ class Sales extends Model
     public function salesDets(): HasMany
     {
         return $this->hasMany(Sales_det::class, 'transaksi', 'kode');
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            'kode' => $this->kode,
+            'tgl' => $this->tgl,
+            'cust_id' => $this->cust_id,
+            'subtotal' => $this->subtotal,
+            'diskon' => $this->diskon,
+            'ongkir' => $this->ongkir,
+            'total_bayar' => $this->total_bayar,
+        ];
     }
 }
 

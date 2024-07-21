@@ -17,9 +17,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('transaksi.form');
+Route::get('/test', function () {
+    return view('layouts.notfound');
 });
+Route::get('/', [SalesController::class, 'dashboard'])->name('data');
 
 Route::get('/barang', [BarangController::class, 'barang'])->name('barang');
 Route::post('/barang/tambah/', [BarangController::class, 'tambah_barang'])->name('tambah_barang');
@@ -31,5 +32,13 @@ Route::post('/customer/tambah/', [CustomerController::class, 'tambah_customer'])
 Route::delete('/customer/{id}/delete/', [CustomerController::class, 'delete'])->name('customer.delete');
 Route::put('/customer/{id}/update/', [CustomerController::class, 'update'])->name('customer.edit');
 
-Route::get('/transaksi', [SalesDetController::class, 'transaksi_new'])->name('transaksi');
+Route::get('/daftar/transaksi', [SalesController::class, 'transaksi'])->name('transaksi.data');
 
+Route::get('/transaksi', [SalesDetController::class, 'transaksi_new'])->name('transaksi');
+Route::post('/transaksi/new/', [SalesDetController::class, 'transaction'])->name('transaksi.new');
+
+Route::get('/search', [SalesController::class, 'search'])->name('search');
+
+Route::fallback(function (){
+    return response()->view('layouts.notfound', [], 404);
+});

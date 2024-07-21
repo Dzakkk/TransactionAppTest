@@ -3,13 +3,65 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sales;
+use App\Models\Sales_det;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SalesController extends Controller
 {
-    public function transaksi() {
-        $sales = Sales::with('customer')->get();
+    public function transaksi()
+    {
+        $sales = Sales::with('customer', 'salesDets')->get();
+        $det = Sales_det::with('barang', 'sales1')->get();
+        $total = Sales::all()->sum('total_bayar');
 
-        return view('transaksi.data', compact('sales'));
+        return view('transaksi.data', compact('sales', 'det', 'total'));
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->get('query');
+
+        $salesIds = Sales::search($query)->keys();
+
+        $sales = Sales::whereIn('id', $salesIds)
+            ->with('customer', 'salesDets')
+            ->get();
+
+        $total = $sales->sum('total_bayar');
+
+        $det = Sales_det::with('barang', 'sales1')->whereIn('transaksi', $sales->pluck('kode'))->get();
+
+        return view('transaksi.data', compact('sales', 'det', 'total'));
+    }
+
+
+
+    public function dashboard()
+    {
+        $total = Sales::all()->sum('total_bayar');
+
+        $transaction = Sales::count();
+
+        $cust = DB::table('sales')
+            ->select('customers.*', DB::raw('count(sales.id) as total'))
+            ->join('customers', 'sales.cust_id', '=', 'customers.id')
+            ->groupBy('customers.id')
+            ->orderBy('total', 'desc')
+            ->take(3)
+            ->get();
+
+
+
+        $brg = DB::table('sales_dets')
+            ->select('barangs.*', DB::raw('SUM(sales_dets.qty) as total'))
+            ->join('barangs', 'sales_dets.barang_id', '=', 'barangs.id')
+            ->groupBy('barangs.id')
+            ->orderBy('total', 'desc')
+            ->take(3)
+            ->get();
+
+
+        return view('content.dashboard', compact('total', 'transaction', 'cust', 'brg'));
     }
 }
