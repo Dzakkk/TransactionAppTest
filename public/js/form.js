@@ -24,7 +24,6 @@ $(document).ready(function() {
         $('#total_bayar').val(total_bayar.toFixed(2));
     }
 
-
     $(document).on('change', 'select[name^="sales_dets"]', function() {
         var selectElement = $(this);
 
@@ -96,5 +95,8 @@ $(document).ready(function() {
         calculateSubTotal();
     });
 
-});
+    $(document).on('input', 'input[name^="sales_dets"]', function() {
+        calculateSubTotal();
+    });
 
+});

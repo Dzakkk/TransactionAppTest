@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Sales;
 use App\Models\Sales_det;
 use Illuminate\Http\Request;
@@ -20,13 +21,14 @@ class SalesController extends Controller
 
     public function search(Request $request)
     {
-        $query = $request->get('query');
+        $term = $request->get('query');
 
-        $salesIds = Sales::search($query)->keys();
+        $salesResults = Sales::search($term)->get();
+        $customerResults = Customer::search($term)->get();
 
-        $sales = Sales::whereIn('id', $salesIds)
-            ->with('customer', 'salesDets')
-            ->get();
+        $salesFromCustomers = Sales::whereIn('cust_id', $customerResults->pluck('id'))->get();
+
+        $sales = $salesResults->merge($salesFromCustomers);
 
         $total = $sales->sum('total_bayar');
 
@@ -35,8 +37,7 @@ class SalesController extends Controller
         return view('transaksi.data', compact('sales', 'det', 'total'));
     }
 
-
-
+    
     public function dashboard()
     {
         $total = Sales::all()->sum('total_bayar');
@@ -44,9 +45,9 @@ class SalesController extends Controller
         $transaction = Sales::count();
 
         $cust = DB::table('sales')
-            ->select('customers.*', DB::raw('count(sales.id) as total'))
+            ->select('customers.id', 'customers.name', DB::raw('count(sales.id) as total'))
             ->join('customers', 'sales.cust_id', '=', 'customers.id')
-            ->groupBy('customers.id')
+            ->groupBy('customers.id', 'customers.name')
             ->orderBy('total', 'desc')
             ->take(3)
             ->get();
@@ -54,14 +55,18 @@ class SalesController extends Controller
 
 
         $brg = DB::table('sales_dets')
-            ->select('barangs.*', DB::raw('SUM(sales_dets.qty) as total'))
+            ->select('barangs.id', 'barangs.nama', DB::raw('SUM(sales_dets.qty) as total'))
             ->join('barangs', 'sales_dets.barang_id', '=', 'barangs.id')
-            ->groupBy('barangs.id')
+            ->groupBy('barangs.id', 'barangs.nama')
             ->orderBy('total', 'desc')
             ->take(3)
             ->get();
 
 
         return view('content.dashboard', compact('total', 'transaction', 'cust', 'brg'));
+    }
+
+    public function about() {
+        return view('layouts.about');
     }
 }

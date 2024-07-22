@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 class BarangController extends Controller
 {
     public function barang() {
-        $brg = Barang::paginate('15');
+        $brg = Barang::paginate('8');
         return view('barang.data', compact('brg'));
     }
 
@@ -20,8 +20,16 @@ class BarangController extends Controller
             'harga' => 'required'
         ]);
 
+        $brg = Barang::where('kode', $request->kode)->first();
+
+        if ($brg) {
+            $kode = $request->kode . rand(1, 9);
+        } else {
+            $kode = $request->kode;
+        }
+
         Barang::create([
-            'kode' => $request->kode,
+            'kode' => $kode,
             'nama' => $request->nama,
             'harga' => $request->harga,
         ]);

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class CustomerController extends Controller
 {
     public function customer() {
-        $cus = Customer::paginate('10');
+        $cus = Customer::paginate('8');
         return view('customer.data', compact('cus'));
     }
 
@@ -19,8 +19,16 @@ class CustomerController extends Controller
             'telp' => 'required'
         ]);
 
+        $cus = Customer::where('kode', $request->kode)->first();
+
+        if ($cus) {
+            $kode = $request->kode . rand(1, 9);
+        } else {
+            $kode = $request->kode;
+        }
+
         Customer::create([
-            'kode' => $request->kode,
+            'kode' => $kode,
             'name' => $request->name,
             'telp' => $request->telp,
         ]);

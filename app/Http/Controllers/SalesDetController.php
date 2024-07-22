@@ -79,6 +79,6 @@ class SalesDetController extends Controller
             'total_bayar' => $request->total_bayar,
         ]);
 
-        return redirect('transaksi')->with('success', 'berhasil mass');
+        return redirect('/daftar/transaksi')->with('success', 'berhasil mass');
     }
 }

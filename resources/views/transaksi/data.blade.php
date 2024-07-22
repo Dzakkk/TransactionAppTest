@@ -51,26 +51,13 @@
                     class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <th scope="row" class="px-6 py-3">{{ $loop->iteration }}</th>
                     <td class="px-6 py-3">{{ $c->kode }}</td>
-                    <td class="px-6 py-3">{{ $c->tgl }}</td>
+                    <td class="px-6 py-3">{{ date('d-M-Y', strtotime($c->tgl)) }}</td>
                     <td class="px-6 py-3">{{ $c->customer->name }}</td>
                     <td class="px-6 py-3">{{ $c->salesDets->sum('qty') }}</td>
                     <td class="px-6 py-3">{{ number_format($c->subtotal, 2) }}</td>
                     <td class="px-6 py-3">{{ number_format($c->diskon, 2) }}</td>
                     <td class="px-6 py-3">{{ number_format($c->ongkir, 2) }}</td>
                     <td class="px-6 py-3">{{ number_format($c->total_bayar, 2) }}</td>
-                    {{-- <td class="px-2 py-4 text-right inline-flex">
-                        <button data-modal-target="edit-modal-{{ $c->id }}" data-modal-toggle="edit-modal-{{ $c->id }}"
-                        class="block text-white mx-1 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-1 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                        type="button">
-                        Edit
-                    </button>                         
-                        <button data-modal-target="popup-modal-{{ $c->id }}"
-                            data-modal-toggle="popup-modal-{{ $c->id }}"
-                            class="block text-white mx-1 bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-1 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
-                            type="button">
-                            Delete
-                        </button>
-                    </td> --}}
                 </tr>
             @endforeach
         </tbody>
@@ -82,15 +69,16 @@
             </tr>
         </tfoot>
     </table>
-    {{-- <div class="m-2">
-        {{ $cus->onEachSide(3)->links() }}
-    </div> --}}
+   
 </div>
 
-<div class="my-2">
+<div class="my-2 flex gap4">
     <button onclick="show('history')"
         class="block text-white mx-1 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-1 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         type="button">History Transaksi</button>
+        <a href="/transaksi"
+        class="block text-white mx-1 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-1 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        type="button">Buat Transaksi</a>
 </div>
 
 <script>
@@ -118,9 +106,6 @@
                 <th scope="col" class="px-6 py-3">Diskon Nilai</th>
                 <th scope="col" class="px-6 py-3">Harga Diskon</th>
                 <th scope="col" class="px-6 py-3">total</th>
-                {{-- <th scope="col" class="px-2 py-3">
-                    <span class="sr-only">Edit</span>
-                </th> --}}
             </tr>
         </thead>
         <tbody class="">
@@ -144,32 +129,9 @@
                     <td class="px-6 py-3">{{ number_format($c->diskon_nilai, 2) }}</td>
                     <td class="px-6 py-3">{{ number_format($c->harga_diskon, 2) }}</td>
                     <td class="px-6 py-3">{{ number_format($c->total, 2) }}</td>
-                    {{-- <td class="px-2 py-4 text-right inline-flex">
-                        <button data-modal-target="edit-modal-{{ $c->id }}" data-modal-toggle="edit-modal-{{ $c->id }}"
-                        class="block text-white mx-1 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-1 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                        type="button">
-                        Edit
-                    </button>                         
-                        <button data-modal-target="popup-modal-{{ $c->id }}"
-                            data-modal-toggle="popup-modal-{{ $c->id }}"
-                            class="block text-white mx-1 bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-1 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
-                            type="button">
-                            Delete
-                        </button>
-                    </td> --}}
                 </tr>
             @endforeach
         </tbody>
-        {{-- <tfoot>
-            <tr>
-                <th colspan="4"></th>
-                <th colspan="4">Grand Total</th>
-                <th class="px-6 py-3">{{ number_format($total, 2) }}</th>
-            </tr>
-        </tfoot> --}}
     </table>
-    {{-- <div class="m-2">
-        {{ $cus->onEachSide(3)->links() }}
-    </div> --}}
 </div>
 @endsection

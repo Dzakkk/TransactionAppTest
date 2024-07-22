@@ -18,8 +18,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/test', function () {
-    return view('layouts.notfound');
+    return view('layouts.about');
 });
+
 Route::get('/', [SalesController::class, 'dashboard'])->name('data');
 
 Route::get('/barang', [BarangController::class, 'barang'])->name('barang');
@@ -38,6 +39,7 @@ Route::get('/transaksi', [SalesDetController::class, 'transaksi_new'])->name('tr
 Route::post('/transaksi/new/', [SalesDetController::class, 'transaction'])->name('transaksi.new');
 
 Route::get('/search', [SalesController::class, 'search'])->name('search');
+Route::get('/about', [SalesController::class, 'about'])->name('about');
 
 Route::fallback(function (){
     return response()->view('layouts.notfound', [], 404);

@@ -132,13 +132,12 @@
                     <p class="italic text-sm text-red-700">*isi semua diskon dengan 0 jika tidak ada diskon</p>
                     <p class="italic text-sm text-blue-700"><- Button untuk menambah input barang</p>
                 </div>
-
             </div>
         </div>
 
         <div class="w-full flex justify-end">
-            {{-- <div class="items-center justify-center rounded bg-gray-100 h-32 p-3 dark:bg-gray-800">
-                <p class="italic text-red-700">*isi semua diskon atau ongkir dengan 0 jika tidak ada diskon atau ongkir</p>
+            {{-- <div class="items-center justify-center rounded bg-gray-100 p-3 dark:bg-gray-800">
+                <p class="italic text-sm text-red-700">*Jika setelah menghapus field input subtotal tidak berubah, masukkan ulang salah satu qty atau diskon (%) pada field lain</p>
             </div> --}}
             <div class="items-center justify-center md:items-end md:w-1/2 rounded bg-gray-100 h-32 p-3 dark:bg-gray-800">
                 <div class="col-span-2">
@@ -240,10 +239,23 @@
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-1 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
             placeholder="" required>
     </div>
+    <button type="button" onclick="removeSalesDet(this)" class="text-red-700 hover:text-red-900 focus:outline-none">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+    </button>
 `;
             document.getElementById('sales-details').appendChild(salesDetDiv);
             $('.select2').select2();
             count++;
+            calculateSubTotal();
+        }
+
+        function removeSalesDet(element) {
+            element.parentNode.remove();
+            calculateSubTotal();
         }
     </script>
 @endsection
